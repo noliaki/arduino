@@ -19,10 +19,7 @@
    * socket
    */
   var socket = io("//localhost:8081");
-  socket.on("onChangeColor", function (data) {
-    // console.log(data);
-    HSV_H = data;
-  });
+  
 
   var document = window.document, 
       canvasEle = document.querySelector("#line-particle"), 
@@ -42,6 +39,11 @@
     var i = 0,
         len = particleNum,
         random = Math.random;
+
+    socket.on("onChangeColor", function (data) {
+      // console.log(data);
+      HSV_H = data;
+    });
 
     onWinResize();
 
