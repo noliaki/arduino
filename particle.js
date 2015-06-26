@@ -16,29 +16,31 @@
   })();
 
   /**
-   * socket
+   * variables
    */
-  var socket = io("//localhost:8081");
-  
+  var document      = window.document, 
+      canvasEle     = document.querySelector("#line-particle"), 
+      context       = canvasEle.getContext("2d"), 
+      particleNum   = 50, 
+      propData      = [], 
+      canvasWidth   = 500, 
+      canvasHeight  = 500, 
+      radius        = 25, 
+      PI            = Math.PI, 
+      easing        = 50,
+      HSV_H         = 0,
+      HSV_S         = 0.7,
+      HSV_V         = 0.7,
+      socket        = io("//" + location.hostname + ":8081");
 
-  var document = window.document, 
-      canvasEle = document.querySelector("#line-particle"), 
-      context = canvasEle.getContext("2d"), 
-      particleNum = 50, 
-      propData = [], 
-      canvasWidth = 500, 
-      canvasHeight = 500, 
-      radius = 25, 
-      PI = Math.PI, 
-      easing = 50,
-      HSV_H = 0,
-      HSV_S = 0.7,
-      HSV_V = 0.7;
 
+  /**
+   * functions
+   */
   var init = function(){
-    var i = 0,
-        len = particleNum,
-        random = Math.random;
+    var i       = 0,
+        len     = particleNum,
+        random  = Math.random;
 
     socket.on("onChangeColor", function (data) {
       // console.log(data);
@@ -49,25 +51,25 @@
 
     for( ; i < len; i ++ ){
       propData[i] = {
-        x: random() * canvasWidth,
-        y: random() * canvasHeight,
-        rotate: 0,//random() * 360,
+        x         :random() * canvasWidth,
+        y         :random() * canvasHeight,
+        rotate    :0,//random() * 360,
 
-        dx: random() * -4 + 2,
-        dy: random() * -4 + 2,
-        toX: 1,
-        toY: -1,
+        dx        :random() * -4 + 2,
+        dy        :random() * -4 + 2,
+        toX       :1,
+        toY       :-1,
 
-        bezierR: random() * 300,
-        bezierA: random() * 360,
-        bezierD: (random() > 0.5? 1 : -1),
-        bezierDa: random(),
+        bezierR   :random() * 300,
+        bezierA   :random() * 360,
+        bezierD   :(random() > 0.5? 1 : -1),
+        bezierDa  :random(),
 
-        dr: random() * 360,
-        toR: random() * -4 + 2,
+        dr        :random() * 360,
+        toR       :random() * -4 + 2,
 
-        dS: 0.1,
-        toS: 0.1        
+        dS        :0.1,
+        toS       :0.1
       };
 
       propData[i].scale = propData[i].toS = ((i % 10) + 1) / 10;
@@ -80,18 +82,18 @@
 
   var draw = function(){
 
-    var pData = propData,
-        lo_getDist = getDist,
-        i = 0,
-        len = particleNum,
-        random = Math.random,
-        abs = Math.abs,
-        cos = Math.cos,
-        sin = Math.sin,
-        dist = 300,
-        endR = 360 * PI / 180,
-        lo_getRGB = getRGB,
-        lo_context = context,
+    var pData       = propData,
+        lo_getDist  = getDist,
+        i           = 0,
+        len         = particleNum,
+        random      = Math.random,
+        abs         = Math.abs,
+        cos         = Math.cos,
+        sin         = Math.sin,
+        dist        = 300,
+        endR        = 360 * PI / 180,
+        lo_getRGB   = getRGB,
+        lo_context  = context,
         gradient;
 
     lo_context.restore();
@@ -255,17 +257,16 @@
   };
 
   var onMouseWheel = function(event) {
-    var
-      i = 0,
-      len = particleNum,
-      random = Math.random,
-      mouseX = event.pageX,
-      mouseY = event.pageY,
-      direct = event.wheelDelta > 0? 1 : -1,
-      dist = 0,
-      vol = 10,
-      difX = 0,
-      difY = 0;
+    var i       = 0,
+        len     = particleNum,
+        random  = Math.random,
+        mouseX  = event.pageX,
+        mouseY  = event.pageY,
+        direct  = event.wheelDelta > 0? 1 : -1,
+        dist = 0,
+        vol = 10,
+        difX = 0,
+        difY = 0;
 
     for( ; i < len; i ++ ){
 
